@@ -1,0 +1,169 @@
+######## PARTE 1 - Branches e fast-forward ########
+
+$ git status
+No ramo main
+nothing to commit, working tree clean
+
+$ git switch main
+Already on 'main'
+
+$ git branch feature
+
+$ git branch
+  feature
+* main
+
+$ git switch feature
+Switched to branch 'feature'
+
+$ git add README.md
+
+$ git commit -m "Adiciona nova funcionalidade"
+[feature 8b7e11b] Adiciona nova funcionalidade
+ 1 file changed, 1 insertion(+)
+
+$ git log --all --oneline --graph --decorate
+* 8b7e11b (HEAD -> feature) Adiciona nova funcionalidade
+* 84c5154 (main) Commit inicial: README e blog Hugo da aula 1
+
+$ git switch main
+Switched to branch 'main'
+
+$ grep -c "Nova funcionalidade" README.md
+0
+
+$ git merge --ff-only feature
+Updating 84c5154..8b7e11b
+Fast-forward
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)
+
+$ git log --all --oneline --graph --decorate
+* 8b7e11b (HEAD -> main, feature) Adiciona nova funcionalidade
+* 84c5154 Commit inicial: README e blog Hugo da aula 1
+
+$ tail -1 README.md
+Nova funcionalidade
+
+$ git branch -d feature
+Deleted branch feature (was 8b7e11b).
+
+$ git branch
+* main
+
+$ git status
+No ramo main
+nothing to commit, working tree clean
+
+######## PARTE 2 - Posts do blog com branches ########
+
+$ git switch -c perfil-profissional
+Switched to a new branch 'perfil-profissional'
+
+$ git add content/posts/perfil-profissional.md
+
+$ git commit -m "Adiciona post de perfil profissional"
+[perfil-profissional ba93eb4] Adiciona post de perfil profissional
+ 1 file changed, 16 insertions(+)
+ create mode 100644 content/posts/perfil-profissional.md
+
+$ git log --all --oneline --graph --decorate
+* ba93eb4 (HEAD -> perfil-profissional) Adiciona post de perfil profissional
+* 8b7e11b (main) Adiciona nova funcionalidade
+* 84c5154 Commit inicial: README e blog Hugo da aula 1
+
+$ git switch main
+Switched to branch 'main'
+
+$ ls content/posts
+hello-world.md
+
+$ git merge --ff-only perfil-profissional
+Updating 8b7e11b..ba93eb4
+Fast-forward
+ content/posts/perfil-profissional.md | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 content/posts/perfil-profissional.md
+
+$ git branch -d perfil-profissional
+Deleted branch perfil-profissional (was ba93eb4).
+
+$ ls content/posts
+hello-world.md
+perfil-profissional.md
+
+$ git switch -c hobbies
+Switched to a new branch 'hobbies'
+
+$ git add content/posts/hobbies.md
+
+$ git commit -m "Adiciona post de hobbies"
+[hobbies 88608a7] Adiciona post de hobbies
+ 1 file changed, 12 insertions(+)
+ create mode 100644 content/posts/hobbies.md
+
+$ git log --all --oneline --graph --decorate
+* 88608a7 (HEAD -> hobbies) Adiciona post de hobbies
+* ba93eb4 (main) Adiciona post de perfil profissional
+* 8b7e11b Adiciona nova funcionalidade
+* 84c5154 Commit inicial: README e blog Hugo da aula 1
+
+$ git switch main
+Switched to branch 'main'
+
+$ git merge --ff-only hobbies
+Updating ba93eb4..88608a7
+Fast-forward
+ content/posts/hobbies.md | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+ create mode 100644 content/posts/hobbies.md
+
+$ git branch -d hobbies
+Deleted branch hobbies (was 88608a7).
+
+$ ls content/posts
+hello-world.md
+hobbies.md
+perfil-profissional.md
+
+$ git status --short --untracked-files=all
+?? teste-lab2.tmp
+
+$ git check-ignore -v teste-lab2.tmp
+.gitignore:4:*.tmp	teste-lab2.tmp
+
+$ git status --ignored
+No ramo main
+Arquivos não monitorados:
+  (utilize "git add <arquivo>..." para incluir o que será submetido)
+	.gitignore
+
+Arquivos ignorados:
+  (utilize "git add -f <arquivo>..." para incluir o que será submetido)
+	teste-lab2.tmp
+
+nada adicionado ao envio mas arquivos não registrados estão presentes (use "git add" to registrar)
+
+$ git add .gitignore
+
+$ git commit -m "Ignora arquivos temporarios"
+[main c13f122] Ignora arquivos temporarios
+ 1 file changed, 4 insertions(+)
+ create mode 100644 .gitignore
+
+######## VALIDACAO ########
+
+$ git branch
+* main
+
+$ git status
+No ramo main
+nothing to commit, working tree clean
+
+$ git log --all --oneline --graph --decorate
+* c13f122 (HEAD -> main) Ignora arquivos temporarios
+* 88608a7 Adiciona post de hobbies
+* ba93eb4 Adiciona post de perfil profissional
+* 8b7e11b Adiciona nova funcionalidade
+* 84c5154 Commit inicial: README e blog Hugo da aula 1
+
